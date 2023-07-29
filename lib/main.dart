@@ -125,6 +125,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<void> _Delete(String productId) async{
+    await _tblProduct.doc(productId).delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,7 +166,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                 onPressed: () => _showForm(documentSnapshot),
                                 icon: const Icon(Icons.edit)),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  QuickAlert.show(context: context,
+                                      type: QuickAlertType.confirm,
+                                      onConfirmBtnTap: (){
+                                        _Delete(documentSnapshot.id);
+                                        Navigator.of(context).pop();
+                                      },
+                                      confirmBtnText: 'Yes',
+                                      onCancelBtnTap: (){
+                                        Navigator.of(context).pop();
+                                      },
+                                      title: 'Are you sure you want to Delete?'
+                                  );
+                                },
                                 icon: const Icon(Icons.delete))
                           ],
                         ),
