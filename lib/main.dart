@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (documentSnapshot == null) {
                     _Add();
                   } else {
-                    // _Update(documentSnapshot);
+                    _Update(documentSnapshot);
                   }
                   nameController.clear();
                   priceController.clear();
@@ -107,6 +107,18 @@ class _MyHomePageState extends State<MyHomePage> {
     final double? price = double.tryParse(priceController.text.toString());
 
     await _tblProduct.add({"name": name, "price": price});
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+    );
+  }
+
+  Future<void> _Update(DocumentSnapshot documentSnapshot) async {
+    String name = nameController.text;
+    final double? price = double.tryParse(priceController.text.toString());
+    await _tblProduct
+        .doc(documentSnapshot.id)
+        .update({"name": name, "price": price});
     QuickAlert.show(
       context: context,
       type: QuickAlertType.success,
@@ -147,7 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Row(
                           children: [
                             IconButton(
-                                onPressed: () {}, icon: const Icon(Icons.edit)),
+                                onPressed: () => _showForm(documentSnapshot),
+                                icon: const Icon(Icons.edit)),
                             IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Icons.delete))
